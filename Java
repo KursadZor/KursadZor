@@ -1,0 +1,157 @@
+android {
+    ...
+    buildFeatures {
+        viewBinding true
+    }
+}
+<LinearLayout
+        ...
+        tools:viewBindingIgnore="true" >
+    ...
+</LinearLayout>
+<LinearLayout ... >
+    <TextView android:id="@+id/name" />
+    <ImageView android:cropToPadding="true" />
+    <Button android:id="@+id/button"
+        android:background="@drawable/rounded_button" />
+</LinearLayout>
+private ResultProfileBinding binding;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    binding = ResultProfileBinding.inflate(getLayoutInflater());
+    View view = binding.getRoot();
+    setContentView(view);
+}
+//kotlin//
+private lateinit var binding: ResultProfileBinding
+
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    binding = ResultProfileBinding.inflate(layoutInflater)
+    val view = binding.root
+    setContentView(view)
+
+binding.getName().setText(viewModel.getName());
+binding.button.setOnClickListener(new View.OnClickListener() {
+    viewModel.userClicked()
+});
+
+private ResultProfileBinding binding;
+
+@Override
+public View onCreateView (LayoutInflater inflater,
+                          ViewGroup container,
+                          Bundle savedInstanceState) {
+    binding = ResultProfileBinding.inflate(inflater, container, false);
+    View view = binding.getRoot();
+    return view;
+}
+
+@Override
+public void onDestroyView() {
+    super.onDestroyView();
+    binding = null;
+}
+binding.getName().setText(viewModel.getName());
+binding.button.setOnClickListener(new View.OnClickListener() {
+    viewModel.userClicked()
+});
+# in res/layout/example.xml
+<TextView android:id="@+id/user_bio" />
+
+# in res/layout-land/example.xml
+<EditText android:id="@+id/user_bio" />
+# in res/layout/example.xml (unchanged)
+<TextView android:id="@+id/user_bio" />
+
+# in res/layout-land/example.xml
+<EditText android:id="@+id/user_bio" tools:viewBindingType="TextView" />
+# in res/layout/navigation_example.xml
+<BottomNavigationView android:id="@+id/navigation" tools:viewBindingType="NavigationBarView" />
+
+# in res/layout-w720/navigation_example.xml
+<NavigationRailView android:id="@+id/navigation" tools:viewBindingType="NavigationBarView"
+//YENİLENEN DÜZEN//
+xml <TextView tools:viewBindingType="ImageView" /> <!-- ImageView is not related to TextView --> <TextView tools:viewBindingType="Button" /> <!-- Button is not a superclass of TextView -->
+ // Typed DataStore (Typed API surface, such as Proto)
+    dependencies {
+        implementation "androidx.datastore:datastore:1.0.0"
+
+        // optional - RxJava2 support
+        implementation "androidx.datastore:datastore-rxjava2:1.0.0"
+
+        // optional - RxJava3 support
+        implementation "androidx.datastore:datastore-rxjava3:1.0.0"
+    }
+
+    // Alternatively - use the following artifact without an Android dependency.
+    dependencies {
+        implementation "androidx.datastore:datastore-core:1.0.0"
+    }
+    // Preferences DataStore (SharedPreferences like APIs)
+    dependencies {
+        implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+        // optional - RxJava2 support
+        implementation "androidx.datastore:datastore-preferences-rxjava2:1.0.0"
+
+        // optional - RxJava3 support
+        implementation "androidx.datastore:datastore-preferences-rxjava3:1.0.0"
+    }
+
+    // Alternatively - use the following artifact without an Android dependency.
+    dependencies {
+        implementation "androidx.datastore:datastore-preferences-core:1.0.0"
+    }RxDataStore<Preferences> dataStore =
+  new RxPreferenceDataStoreBuilder(context, /*name=*/ "settings").build();
+  Preferences.Key<Integer> EXAMPLE_COUNTER = PreferencesKeys.int("example_counter");
+
+Flowable<Integer> exampleCounterFlow =
+  dataStore.data().map(prefs -> prefs.get(EXAMPLE_COUNTER));
+  Single<Preferences> updateResult =  dataStore.updateDataAsync(prefsIn -> {
+  MutablePreferences mutablePreferences = prefsIn.toMutablePreferences();
+  Integer currentInt = prefsIn.get(INTEGER_KEY);
+  mutablePreferences.set(INTEGER_KEY, currentInt != null ? currentInt + 1 : 1);
+  return Single.just(mutablePreferences);
+});
+// The update is completed once updateResult is completed.
+syntax = "proto3";
+
+option java_package = "com.example.application";
+option java_multiple_files = true;
+
+message Settings {
+  int32 example_counter = 1;
+}
+private static class SettingsSerializer implements Serializer<Settings> {
+  @Override
+  public Settings getDefaultValue() {
+    Settings.getDefaultInstance();
+  }
+
+  @Override
+  public Settings readFrom(@NotNull InputStream input) {
+    try {
+      return Settings.parseFrom(input);
+    } catch (exception: InvalidProtocolBufferException) {
+      throw CorruptionException(“Cannot read proto.”, exception);
+    }
+  }
+
+  @Override
+  public void writeTo(Settings t, @NotNull OutputStream output) {
+    t.writeTo(output);
+  }
+}
+
+RxDataStore<Byte> dataStore =
+    new RxDataStoreBuilder<Byte>(context, /* fileName= */ "settings.pb", new SettingsSeriali
+    Single<Settings> updateResult =
+  dataStore.updateDataAsync(currentSettings ->
+    Single.just(
+      currentSettings.toBuilder()
+        .setExampleCounter(currentSettings.getExampleCounter() + 1)
+        .build()));
+        
